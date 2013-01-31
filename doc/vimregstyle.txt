@@ -1,0 +1,52 @@
+*vimregstyle.txt*	For Vim version 7.3	Last change: 2013-01-31
+
+
+			VIM REFERENCE MANUAL	by Barry Arthur
+
+
+Help on using vimregstyle                                        *vimregstyle*
+
+1. Introduction				|vimregstyle-intro|
+2. Functions				|vimregstyle-functions|
+3. Patterns				|vimregstyle-patterns|
+
+==============================================================================
+ 1. INTRODUCTION                                           *vimregstyle-intro*
+
+VimRegStyle is a Regular Expression Pattern Library and suite of
+utilities for operating on matches within text.
+
+==============================================================================
+ 2. FUNCTIONS                                          *vimregstyle-functions*
+
+VimRegStyle maintains an internal library of named patterns.
+
+                                                       *vimregstyle-set*
+set({name}, {pattern})
+
+Used to add new patterns to the library.
+
+                                                       *vimregstyle-get*
+get({name})
+
+Get the pattern for the given name.
+
+                                                       *vimregstyle-matches*
+matches({expr}, {name} [, {start}[, {count}]])
+
+Predicate returning true if {expr} matches {name}.
+
+                                                       *vimregstyle-match*
+match({expr}, {name} [, {start}[, {count}]])
+
+Replica of builtin |match()| function.
+
+==============================================================================
+ 3. PATTERNS                                            *vimregstyle-patterns*
+
+The patterns are stored in {*.vim} files with the plugin's
+{/patterns/} directory.
+
+TODO: Allow user patterns in ~/.vim/patterns/
+
+ vim:tw=78:ts=8:ft=help:norl:

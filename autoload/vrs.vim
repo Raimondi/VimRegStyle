@@ -1,3 +1,4 @@
+" XXX Should we have the "original" pcre regex in the dict too?
 let s:vrs_patterns = {}
 let g:vrs_collection = []
 let g:vrs_collection_stack = []
@@ -7,7 +8,10 @@ function! vrs#set(name, pattern)
 endfunction
 
 function! vrs#get(name)
-  return s:vrs_patterns[a:name]
+  " Allow using a list of names as well.
+  return type(a:name) == type("")
+        \ ? s:vrs_patterns[a:name]
+        \ : map(a:name, 's:vrs_patterns[v:val]')
 endfunction
 
 function! vrs#match(string, pattern, ...)
@@ -17,6 +21,15 @@ endfunction
 
 function! vrs#matches(string, pattern, ...)
   return call('vrs#match', extend([a:string, a:pattern], a:000)) != -1
+endfunction
+
+" XXX Should these two return the filtered dict or just a list of keys?
+function! vrs#from_partial(partial)
+  return keys(filter(copy(s:vrs_patterns), 'stridx(v:key, a:partial) > -1'))
+endfunction
+
+function! vrs#from_sample(sample)
+  return keys(filter(copy(s:vrs_patterns), 'a:sample =~# v:val'))
 endfunction
 
 " operate on each match within a string

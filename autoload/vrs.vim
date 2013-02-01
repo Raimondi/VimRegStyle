@@ -10,7 +10,7 @@ endfunction
 function! vrs#get(name)
   " Allow using a list of names as well.
   return type(a:name) == type("")
-        \ ? s:vrs_patterns[a:name]
+        \ ? get(s:vrs_patterns, a:name, '')
         \ : map(a:name, 's:vrs_patterns[v:val]')
 endfunction
 

@@ -1,13 +1,14 @@
 call vimtest#StartTap()
-call vimtap#Plan(7) " <== XXX  Keep plan number updated.  XXX
+call vimtap#Plan(2) " <== XXX  Keep plan number updated.  XXX
 
-call extended_regex#register_lookup('VimVar')
-let foo = 'bar'
-let t = '\<\%{g:foo,4,.}\>'
-echo extended_regex#expand_composition_atom(t)
+" use default lookup function (which simply accesses vim variables)
+let erex = ExtendedRegexObject()
 
-let s:baz = 'one'
-let u = '\<\%{s:baz,4,.}\>'
-echo extended_regex#expand_composition_atom(u)
+let x = 'a'
+let t = '\<\%{g:x,4,.}\>'
+let t_expanded = '\<a\.a\.a\.a\>'
+
+call vimtap#Is(erex.expand_composition_atom(t), t_expanded, 'expand vim global variable (expand_composition_atom)')
+call vimtap#Is(erex.parse(t), t_expanded, 'expand vim global variable (parse)')
 
 call vimtest#Quit()

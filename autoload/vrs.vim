@@ -11,11 +11,12 @@ function! vrs#set(name, flavour, pattern)
   let s:vrs_patterns[a:name][a:flavour] = (a:flavour == 'vim' ? s:erex.parse(a:pattern) : a:pattern)
 endfunction
 
-function! vrs#get(name)
+function! vrs#get(name, ...)
+  let flavor = a:0 ? a:1 : 'vim'
   " Allow using a list of names as well.
   return type(a:name) == type("")
-        \ ? get(s:vrs_patterns, a:name, '')['vim']
-        \ : map(a:name, 's:vrs_patterns[v:val]["vim"]')
+        \ ? get(get(s:vrs_patterns, a:name, '{}'), flavor, '')
+        \ : map(a:name, 's:vrs_patterns[v:val].' . flavor)
 endfunction
 
 function! vrs#match(string, pattern, ...)
@@ -33,7 +34,7 @@ function! vrs#from_partial(partial)
 endfunction
 
 function! vrs#from_sample(sample)
-  return keys(filter(copy(s:vrs_patterns), 'a:sample =~# v:val'))
+  return keys(filter(copy(s:vrs_patterns), 'a:sample =~# v:val.vim'))
 endfunction
 
 " operate on each match within a string
@@ -112,14 +113,14 @@ for pfile in split(glob(expand('<sfile>:p:h:h') . '/patterns/*.vrs'), "\n")
     " strip trailing comments
     let line = substitute(line, '\s*#.*', '', '')
     " name lines must be flush to first column (no leading spaces)
-    if match(line, '^\S') != -1
+    if line =~ '^\S'
       if !empty(name)
         " finalise & add prior multiline pattern
         " echo 'call vrs#set(' . name . ' ' . flavour . ' ' . erex.parse(pattern) . ')'
         call vrs#set(name, flavour, pattern)
         let [name, flavour, pattern] = ['', '', '']
       endif
-      if match(line, '\s\+\S\+\s\+\S') != -1
+      if line =~ '\s\+\S\+\s\+\S'
         let [all, name, flavour, pattern ;rest] = matchlist(line, '^\(\S\+\)\s\+\(\S\+\)\s\+\(.*\)')
         " echo 'call vrs#set(' . name . ' ' . flavour . ' ' . erex.parse(pattern) . ')'
         call vrs#set(name, flavour, pattern)

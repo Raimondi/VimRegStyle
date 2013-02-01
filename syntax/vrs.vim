@@ -29,7 +29,8 @@ syn match       vrsNameErr    /^\S\+\s\+/ contained
 syn match       vrsName       /^\w\+\s\+/ contained
 syn match       vrsFlavorErr  /\%(^\S\+\s\+\)\@<=\S\+\s\+/ contained
 syn match       vrsFlavor     /\%(^\S\+\s\+\)\@<=\w\+\s\+/ contained
-syn match       vrsCompose    /\\%{\S\+,\d\+,\%(\\}\|[^}]\)*}/ contained
+syn match       vrsCompItem   /\w\+\|\d\+\|,\@<=\%(\\}\|[^}]\)\+/ contained
+syn match       vrsCompose    /\\%{\S\+,\d\+,\%(\\}\|[^}]\)*}/ contained contains=vrsCompItem
 syn match       vrsRegExp     /\%(^\S\+\s\+\S\+\s\+\)\@<=.*/ contains=vrsCompose contained
 syn match       vrsCommand    /^\S\+\s\+\S\+\s\+\S.*/ contains=vrsName,vrsFlavor,vrsNameErr,vrsFlavorErr,vrsRegExp,vrsComment
 syn match       vrsContinued  /^\s\+\S.*/ contains=vrsComment
@@ -45,6 +46,7 @@ hi def link vrsFlavor    Type
 hi def link vrsRegExp    String
 hi def link vrsContinued String
 hi def link vrsCompose   PreProc
+hi def link vrsCompItem  Normal
 hi def link vrsError     Error
 hi def link vrsFlavorErr Error
 hi def link vrsNameErr   Error

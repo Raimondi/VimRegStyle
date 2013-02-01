@@ -102,7 +102,7 @@ for pfile in split(glob(expand('<sfile>:p:h:h') . '/patterns/*.vrs'), "\n")
   if fnamemodify(pfile, ':t') == 'test.vrs'
     continue
   endif
-  echo fnamemodify(pfile, ':t')
+  " echo fnamemodify(pfile, ':t')
   let [name, flavour, pattern] = ['', '', '']
   for line in readfile(pfile)
     " skip blank and comment only lines
@@ -115,13 +115,13 @@ for pfile in split(glob(expand('<sfile>:p:h:h') . '/patterns/*.vrs'), "\n")
     if match(line, '^\S') != -1
       if !empty(name)
         " finalise & add prior multiline pattern
-        echo 'call vrs#set(' . name . ' ' . flavour . ' ' . erex.parse(pattern) . ')'
+        " echo 'call vrs#set(' . name . ' ' . flavour . ' ' . erex.parse(pattern) . ')'
         call vrs#set(name, flavour, pattern)
         let [name, flavour, pattern] = ['', '', '']
       endif
       if match(line, '\s\+\S\+\s\+\S') != -1
         let [all, name, flavour, pattern ;rest] = matchlist(line, '^\(\S\+\)\s\+\(\S\+\)\s\+\(.*\)')
-        echo 'call vrs#set(' . name . ' ' . flavour . ' ' . erex.parse(pattern) . ')'
+        " echo 'call vrs#set(' . name . ' ' . flavour . ' ' . erex.parse(pattern) . ')'
         call vrs#set(name, flavour, pattern)
         let [name, flavour, pattern] = ['', '', '']
       else
@@ -134,7 +134,7 @@ for pfile in split(glob(expand('<sfile>:p:h:h') . '/patterns/*.vrs'), "\n")
     endif
   endfor
   if !empty(name)
-    echo 'call vrs#set(' . name . ' ' . flavour . ' ' . erex.parse(pattern) . ')'
+    " echo 'call vrs#set(' . name . ' ' . flavour . ' ' . erex.parse(pattern) . ')'
     call vrs#set(name, flavour, pattern)
   endif
 endfor

@@ -1,3 +1,7 @@
+function! ExtendedRegexObject(...)
+  return call('extended_regex#ExtendedRegex', a:000)
+endfunction
+
 function! s:ex(key, ...) "{{{1
   let pattern = vrs#get(a:key)
   if empty(pattern)
@@ -11,3 +15,5 @@ endfunction
 " pattern found (defaults to @/.
 " TODO add completion support.
 command! -nargs=+ VRS exec s:ex(<f-args>)
+
+cnoremap <expr> <c-x> vrs#get(

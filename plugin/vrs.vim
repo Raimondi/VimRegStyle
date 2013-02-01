@@ -16,4 +16,3 @@ endfunction
 " TODO add completion support.
 command! -nargs=+ VRS exec s:ex(<f-args>)
 
-cnoremap <expr> <c-x> vrs#get(

@@ -1,3 +1,20 @@
 _ip4_segment vim \%(25[0-5]\|2[0-4]\d\|[01]\?\d\d\?\)
 ip4          vim \<\%{_ip4_segment,4,.}\>
 funcs        vim ^\s*function!\?\s*\(.\{-}\)(
+phone_number vim # multiline
+      ^
+      \%(
+        \(\d\)           # prefix_digit
+        [\ \-\.]\?       # optional_separator
+      \)\?
+      \%(
+        (\?\(\d\{3}\))\? # area_code
+      [\ \-\.]           # separator
+      \)\?
+      \(\d\{3}\)         # trunk
+      [\ \-\.]           # separator
+      \(\d\{4}\)         # line
+      \%(:\ \?x\?        # optional_space_or_x
+        \(\d\+\)         # extension
+      \)\?
+      $

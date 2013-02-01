@@ -1,17 +1,21 @@
 " XXX Should we have the "original" pcre regex in the dict too?
 let s:vrs_patterns = {}
+let s:erex = ExtendedRegexObject('vrs#get')
 let g:vrs_collection = []
 let g:vrs_collection_stack = []
 
-function! vrs#set(name, pattern)
-  let s:vrs_patterns[a:name] = a:pattern
+function! vrs#set(name, flavour, pattern)
+  if !has_key(s:vrs_patterns, a:name)
+    let s:vrs_patterns[a:name] = {}
+  endif
+  let s:vrs_patterns[a:name][a:flavour] = (a:flavour == 'vim' ? s:erex.parse(a:pattern) : a:pattern)
 endfunction
 
 function! vrs#get(name)
   " Allow using a list of names as well.
   return type(a:name) == type("")
-        \ ? get(s:vrs_patterns, a:name, '')
-        \ : map(a:name, 's:vrs_patterns[v:val]')
+        \ ? get(s:vrs_patterns, a:name, '')['vim']
+        \ : map(a:name, 's:vrs_patterns[v:val]["vim"]')
 endfunction
 
 function! vrs#match(string, pattern, ...)
@@ -88,7 +92,49 @@ endfunction
 
 " TODO: Add commands for the collection functions to make them simpler to use
 
+
+
 " load VRS patterns
-for pfile in split(glob(expand('<sfile>:p:h:h') . '/patterns/*.vim'), "\n")
-  exe "source " . pfile
+
+let erex = ExtendedRegexObject('vrs#get')
+for pfile in split(glob(expand('<sfile>:p:h:h') . '/patterns/*.vrs'), "\n")
+  " skip syntax test file
+  if fnamemodify(pfile, ':t') == 'test.vrs'
+    continue
+  endif
+  echo fnamemodify(pfile, ':t')
+  let [name, flavour, pattern] = ['', '', '']
+  for line in readfile(pfile)
+    " skip blank and comment only lines
+    if line =~ '^\s*\(#\|$\)'
+      continue
+    endif
+    " strip trailing comments
+    let line = substitute(line, '\s*#.*', '', '')
+    " name lines must be flush to first column (no leading spaces)
+    if match(line, '^\S') != -1
+      if !empty(name)
+        " finalise & add prior multiline pattern
+        echo 'call vrs#set(' . name . ' ' . flavour . ' ' . erex.parse(pattern) . ')'
+        call vrs#set(name, flavour, pattern)
+        let [name, flavour, pattern] = ['', '', '']
+      endif
+      if match(line, '\s\+\S\+\s\+\S') != -1
+        let [all, name, flavour, pattern ;rest] = matchlist(line, '^\(\S\+\)\s\+\(\S\+\)\s\+\(.*\)')
+        echo 'call vrs#set(' . name . ' ' . flavour . ' ' . erex.parse(pattern) . ')'
+        call vrs#set(name, flavour, pattern)
+        let [name, flavour, pattern] = ['', '', '']
+      else
+        let [all, name, flavour ;rest] = matchlist(line, '^\s*\(\S\+\)\s\+\(\S\+\)')
+        let pattern = ''
+      endif
+    else
+      " collect multiline pattern - each line must be preceded by spaces
+      let pattern .= line
+    endif
+  endfor
+  if !empty(name)
+    echo 'call vrs#set(' . name . ' ' . flavour . ' ' . erex.parse(pattern) . ')'
+    call vrs#set(name, flavour, pattern)
+  endif
 endfor

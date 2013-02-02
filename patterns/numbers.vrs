@@ -1,6 +1,5 @@
 _ip4_segment vim \%(25[0-5]\|2[0-4]\d\|[01]\?\d\d\?\)
 ip4          vim \<\%{_ip4_segment,4,.}\>
-funcs        vim ^\s*function!\?\s*\(.\{-}\)(
 phone_number vim # multiline
       ^
       \%(
@@ -18,3 +17,21 @@ phone_number vim # multiline
         \(\d\+\)         # extension
       \)\?
       $
+phone_number pcre # multiline
+      /^
+        (?:
+          (?<prefix>\d)             # prefix digit
+          [ \-\.]?                  # optional separator
+        )?
+        (?:
+          \(?(?<areacode>\d{3})\)?  # area code
+          [ \-\.]                   # separator
+        )?
+        (?<trunk>\d{3})             # trunk
+        [ \-\.]                     # separator
+        (?<line>\d{4})              # line
+        (?:\ ?x?                    # optional space or 'x'
+          (?<extension>\d+)         # extension
+        )?
+      $/x
+funcs        vim ^\s*function!\?\s*\(.\{-}\)(

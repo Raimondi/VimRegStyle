@@ -8,6 +8,7 @@ function! vrs#set(name, flavour, pattern)
   if !has_key(s:vrs_patterns, a:name)
     let s:vrs_patterns[a:name] = {}
   endif
+  " let s:vrs_patterns[a:name][a:flavour] = (a:flavour == 'vim' ? s:erex.parse(a:pattern) : s:erex.parse_multiline_regex(a:pattern))
   let s:vrs_patterns[a:name][a:flavour] = (a:flavour == 'vim' ? s:erex.parse(a:pattern) : a:pattern)
 endfunction
 
@@ -110,10 +111,10 @@ for pfile in split(glob(expand('<sfile>:p:h:h') . '/patterns/*.vrs'), "\n")
     if line =~ '^\s*\(#\|$\)'
       continue
     endif
-    " strip trailing comments
-    let line = substitute(line, '\s*#.*', '', '')
     " name lines must be flush to first column (no leading spaces)
     if line =~ '^\S'
+      " strip trailing comments
+      let line = substitute(line, '\s*#.*', '', '')
       if !empty(name)
         " finalise & add prior multiline pattern
         " echo 'call vrs#set(' . name . ' ' . flavour . ' ' . erex.parse(pattern) . ')'

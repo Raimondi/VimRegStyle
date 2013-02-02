@@ -31,4 +31,4 @@ command! -nargs=+ VRS exec s:ex(<f-args>)
 
 nnoremap <leader>re a<C-R>=<SID>get_re()<CR>
 
-
+" cno <leader>re <C-R>=<SID>get_re()<CR>

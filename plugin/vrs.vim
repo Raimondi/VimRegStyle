@@ -30,4 +30,5 @@ endfun
 command! -nargs=+ VRS exec s:ex(<f-args>)
 
 ino <leader>re <C-R>=<SID>get_re()<CR>
+cno <leader>re <C-R>=<SID>get_re()<CR>
 

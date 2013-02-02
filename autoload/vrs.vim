@@ -16,7 +16,7 @@ function! vrs#get(name, ...)
   let flavor = a:0 ? a:1 : 'vim'
   " Allow using a list of names as well.
   return type(a:name) == type("")
-        \ ? get(get(s:vrs_patterns, a:name, '{}'), flavor, '')
+        \ ? get(get(s:vrs_patterns, a:name, {}), flavor, '')
         \ : map(a:name, 's:vrs_patterns[v:val].' . flavor)
 endfunction
 

@@ -29,5 +29,6 @@ endfun
 " TODO add completion support.
 command! -nargs=+ VRS exec s:ex(<f-args>)
 
-ino <leader>re <C-R>=<SID>get_re()<CR>
+nnoremap <leader>re a<C-R>=<SID>get_re()<CR>
+
 

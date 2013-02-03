@@ -35,7 +35,7 @@ syn match       vrsCommand    /^\S\+\s\+\S\+\s\+\S.*/ contains=vrsName,vrsFlavor
 syn match       vrsContinued  /^\s\+\S.*/ contains=vrsComment
 syn match       vrsComment    /\%(\%(\\\\\)*\\\)\@<!#.*$/ containedin=ALL contains=vrsTODO
 syn keyword	vrsTodo	TODO FIXME XXX
-syn match       vrsError      /^[^a-zA-Z0-9_#].*/
+syn match       vrsError      /^[^a-zA-Z0-9_# ].*/
 
 " Define the default highlighting.
 " Only used when an item doesn't have highlighting yet

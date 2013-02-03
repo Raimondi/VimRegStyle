@@ -1,4 +1,39 @@
-" XXX Should we have the "original" pcre regex in the dict too?
+" Vim library for short description
+" Maintainer:	Barry Arthur <barry.arthur@gmail.com>
+" 		Israel Chauca F. <israelchauca@gmail.com>
+" Version:	0.1
+" Description:	Long description.
+" Last Change:	2013-02-03
+" License:	Vim License (see :help license)
+" Location:	autoload/vrs.vim
+" Website:	https://github.com/Raimondi/vrs
+"
+" See vrs.txt for help.  This can be accessed by doing:
+"
+" :helptags ~/.vim/doc
+" :help vrs
+
+" Vimscript Setup: {{{1
+" Allow use of line continuation.
+let s:save_cpo = &cpo
+set cpo&vim
+
+" load guard
+" uncomment after plugin development
+" Remove the conditions you do not need, they are there just as an example.
+"if exists("g:loaded_lib_vrs")
+"      \ || v:version < 700
+"      \ || v:version == 703 && !has('patch338')
+"      \ || &compatible
+"  let &cpo = s:save_cpo
+"  finish
+"endif
+"let g:loaded_lib_vrs = 1
+
+" Private Functions: {{{1
+
+" Library Interface: {{{1
+
 let s:vrs_patterns = {}
 let s:erex = ExtendedRegexObject('vrs#get')
 let g:vrs_collection = []
@@ -94,8 +129,6 @@ endfunction
 
 " TODO: Add commands for the collection functions to make them simpler to use
 
-
-
 " load VRS patterns
 
 let erex = ExtendedRegexObject('vrs#get')
@@ -140,3 +173,8 @@ for pfile in split(glob(expand('<sfile>:p:h:h') . '/patterns/*.vrs'), "\n")
     call vrs#set(name, flavour, pattern)
   endif
 endfor
+" Teardown:{{{1
+"reset &cpo back to users setting
+let &cpo = s:save_cpo
+
+" vim: set sw=2 sts=2 et fdm=marker:

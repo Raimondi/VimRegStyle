@@ -1,3 +1,39 @@
+" Vim library for short description
+" Maintainer:	Barry Arthur <barry.arthur@gmail.com>
+" 		Israel Chauca F. <israelchauca@gmail.com>
+" Version:	0.1
+" Description:	Long description.
+" Last Change:	2013-02-03
+" License:	Vim License (see :help license)
+" Location:	autoload/extended_regex.vim
+" Website:	https://github.com/Raimondi/extended_regex
+"
+" See extended_regex.txt for help.  This can be accessed by doing:
+"
+" :helptags ~/.vim/doc
+" :help extended_regex
+
+" Vimscript Setup: {{{1
+" Allow use of line continuation.
+let s:save_cpo = &cpo
+set cpo&vim
+
+" load guard
+" uncomment after plugin development
+" Remove the conditions you do not need, they are there just as an example.
+"if exists("g:loaded_lib_extended_regex")
+"      \ || v:version < 700
+"      \ || v:version == 703 && !has('patch338')
+"      \ || &compatible
+"  let &cpo = s:save_cpo
+"  finish
+"endif
+"let g:loaded_lib_extended_regex = 1
+
+" Private Functions: {{{1
+
+" Library Interface: {{{1
+
 function! extended_regex#ExtendedRegex(...)
   let erex = {}
   let erex.lookup_function = ''
@@ -53,3 +89,8 @@ function! extended_regex#ExtendedRegex(...)
 
   return erex
 endfunction
+" Teardown:{{{1
+"reset &cpo back to users setting
+let &cpo = s:save_cpo
+
+" vim: set sw=2 sts=2 et fdm=marker:

@@ -13,8 +13,6 @@
 " :helptags ~/.vim/doc
 " :help vrs
 
-let g:vrs_version = '0.1'
-
 " Quit when a (custom) syntax file was already loaded
 if exists("b:current_syntax")
   finish

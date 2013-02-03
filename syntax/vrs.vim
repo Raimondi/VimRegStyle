@@ -24,7 +24,6 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-syn match       vrsError      /^[^a-zA-Z0-9_#].*/
 syn match       vrsNameErr    /^\S\+\s\+/ contained
 syn match       vrsName       /^\w\+\s\+/ contained
 syn match       vrsFlavorErr  /\%(^\S\+\s\+\)\@<=\S\+\s\+/ contained
@@ -36,6 +35,7 @@ syn match       vrsCommand    /^\S\+\s\+\S\+\s\+\S.*/ contains=vrsName,vrsFlavor
 syn match       vrsContinued  /^\s\+\S.*/ contains=vrsComment
 syn match       vrsComment    /\%(\%(\\\\\)*\\\)\@<!#.*$/ containedin=ALL contains=vrsTODO
 syn keyword	vrsTodo	TODO FIXME XXX
+syn match       vrsError      /^[^a-zA-Z0-9_#].*/
 
 " Define the default highlighting.
 " Only used when an item doesn't have highlighting yet

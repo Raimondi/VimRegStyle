@@ -1,5 +1,5 @@
-natural         vim   \<+\?\d\+\>
-integer         vim   \<[-+]\?\d\+\>
+natural         vim   +\?\d\+
+integer         vim   [-+]\?\d\+
 hundredths      vim   \<\%(\d\|[1-9]\d\)\>
 z_hundredths    vim   \<\d\{2}\>
 thousandths     vim   \<\%(\%{hundredths}\|[1-9]\d\d\)\>

@@ -67,8 +67,17 @@ function! vrs#match(string, pattern, ...)
   return call('match', args)
 endfunction
 
+function! vrs#matchend(string, pattern, ...)
+  let args = extend([a:string, vrs#get(a:pattern)], a:000)
+  return call('matchend', args)
+endfunction
+
 function! vrs#matches(string, pattern, ...)
   return call('vrs#match', extend([a:string, a:pattern], a:000)) != -1
+endfunction
+
+function! vrs#exactly(string, pattern, ...)
+  return (call('vrs#match', extend([a:string, a:pattern], a:000)) == 0) && (call('vrs#matchend', extend([a:string, a:pattern], a:000)) == (len(a:string)))
 endfunction
 
 " XXX Should these two return the filtered dict or just a list of keys?

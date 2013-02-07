@@ -43,6 +43,12 @@ function! vrs#set(name, flavour, pattern)
   if !has_key(s:vrs_patterns, a:name)
     let s:vrs_patterns[a:name] = {}
   endif
+  if has_key(s:vrs_patterns[a:name], a:flavour)
+    echohl ErrorMsg
+    echom 'VRS: A pattern of that flavour ('.a:flavour.') already exists under "'.a:name.'".'
+    echohl None
+    return ''
+  endif
   " let s:vrs_patterns[a:name][a:flavour] = (a:flavour == 'vim' ? s:erex.parse(a:pattern) : s:erex.parse_multiline_regex(a:pattern))
   let s:vrs_patterns[a:name][a:flavour] = (a:flavour == 'vim' ? s:erex.parse(a:pattern) : a:pattern)
 endfunction

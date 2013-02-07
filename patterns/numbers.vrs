@@ -1,6 +1,12 @@
-_ip4_segment vim \%(25[0-5]\|2[0-4]\d\|[01]\?\d\d\?\)
-ip4          vim \<\%{_ip4_segment,4,.}\>
-phone_number vim # multiline
+natural         vim   \<+\?\d\+\>
+integer         vim   \<[-+]\?\d\+\>
+hundredths      vim   \<\%(\d\|[1-9]\d\)\>
+z_hundredths    vim   \<\d\{2}\>
+thousandths     vim   \<\%(\%{hundredths}\|[1-9]\d\d\)\>
+z_thousandths   vim   \<\d\{3}\>
+_ip4_segment    vim   \%(25[0-5]\|2[0-4]\d\|[01]\?\d\d\?\)
+ip4             vim   \<\%{_ip4_segment,4,.}\>
+phone_number    vim   # multiline
       ^
       \%(
         \(\d\)           # prefix_digit
@@ -17,7 +23,7 @@ phone_number vim # multiline
         \(\d\+\)         # extension
       \)\?
       $
-phone_number pcre # multiline
+phone_number    pcre  # multiline
       /^
         (?:
           (?<prefix>\d)             # prefix digit
@@ -34,4 +40,3 @@ phone_number pcre # multiline
           (?<extension>\d+)         # extension
         )?
       $/x
-funcs        vim ^\s*function!\?\s*\(.\{-}\)(

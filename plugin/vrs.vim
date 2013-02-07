@@ -44,9 +44,19 @@ function! s:ex(key, ...) "{{{1
   return 'let ' . dest . ' = ' . string(pattern)
 endfunction
 
-function! s:get_re()
-  return vrs#get(input('Pattern name: ', '',
+function! s:get_re(...)
+  let re = vrs#get(input('Pattern name: ', '',
         \             'customlist,'.s:SID().'get_names'))
+  if empty(re)
+    return ''
+  endif
+  if !a:0 || a:1 == 0
+    return re
+  elseif a:1 == 1
+    return string(re)
+  else
+    return '"' . escape(re, '"\') . '"'
+  endif
 endfunction
 
 function! s:get_names(a, c, p)
@@ -71,9 +81,52 @@ command! -nargs=+ VRS exec s:ex(<f-args>)
 
 " Maps: {{{1
 
-nnoremap <leader>re a<C-R>=<SID>get_re()<CR>
+inoremap <Plug>VRSPlain  <C-R>=<SID>get_re(0)<CR>
+inoremap <Plug>VRSSingle <C-R>=<SID>get_re(1)<CR>
+inoremap <Plug>VRSDouble <C-R>=<SID>get_re(2)<CR>
+cnoremap <Plug>VRSPlain  <C-R>=<SID>get_re(0)<CR>
+cnoremap <Plug>VRSSingle <C-R>=<SID>get_re(1)<CR>
+cnoremap <Plug>VRSDouble <C-R>=<SID>get_re(2)<CR>
+nnoremap <Plug>VRSPlain  "=<SID>get_re(0)<CR>p
+nnoremap <Plug>VRSSingle "=<SID>get_re(1)<CR>p
+nnoremap <Plug>VRSDouble "=<SID>get_re(2)<CR>p
+nnoremap <Plug>VRS/      /<C-R>=<SID>get_re()<CR>
+nnoremap <Plug>VRS?      ?<C-R>=<SID>get_re()<CR>
 
-" cno <leader>re <C-R>=<SID>get_re()<CR>
+
+if !hasmapto('<Plug>VRSPlain', 'i')
+  imap <unique> <C-B>rep  <Plug>VRSPlain
+endif
+if !hasmapto('<Plug>VRSSingle', 'i')
+  imap <unique> <C-B>re'  <Plug>VRSSingle
+endif
+if !hasmapto('<Plug>VRSDouble', 'i')
+  imap <unique> <C-B>re"  <Plug>VRSDouble
+endif
+if !hasmapto('<Plug>VRSPlain', 'c')
+  cmap <unique> <C-G>rep  <Plug>VRSPlain
+endif
+if !hasmapto('<Plug>VRSSingle', 'c')
+  cmap <unique> <C-G>re'  <Plug>VRSSingle
+endif
+if !hasmapto('<Plug>VRSDouble', 'c')
+  cmap <unique> <C-G>re"  <Plug>VRSDouble
+endif
+if !hasmapto('<Plug>VRSPlain', 'n')
+  nmap <unique> <Leader>rep  <Plug>VRSPlain
+endif
+if !hasmapto('<Plug>VRSSingle', 'n')
+  nmap <unique> <Leader>re'  <Plug>VRSSingle
+endif
+if !hasmapto('<Plug>VRSDouble', 'n')
+  nmap <unique> <Leader>re"  <Plug>VRSDouble
+endif
+if !hasmapto('<Plug>VRS/', 'n')
+  nmap <unique> <Leader>re/  <Plug>VRS/
+endif
+if !hasmapto('<Plug>VRS?', 'n')
+  nmap <unique> <Leader>re?  <Plug>VRS?
+endif
 
 " Teardown:{{{1
 "reset &cpo back to users setting

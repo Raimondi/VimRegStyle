@@ -37,16 +37,19 @@ set cpo&vim
 function! extended_regex#ExtendedRegex(...)
   let erex = {}
   let erex.lookup_function = ''
+  let erex.lookup_dict = {}
 
   func erex.default_lookup(name) dict
     return eval(a:name)
   endfunc
 
+  "TODO: revisit this with eval() solution
   func erex.lookup(name) dict
     if empty(self.lookup_function)
       return call(self.default_lookup, [a:name], self)
     else
-      return call(self.lookup_function, [a:name])
+      "TODO: this 'self' dict arg needs to be the object's self...
+      return call(self.lookup_function, [a:name], self.lookup_dict)
     endif
   endfunc
 
@@ -70,7 +73,7 @@ function! extended_regex#ExtendedRegex(...)
   endfunc
 
   func erex.parse_multiline_regex(ext_reg) dict
-    return substitute(substitute(a:ext_reg, '# \S\+', '', 'g'), '\\\@<! ', '', 'g')
+    return substitute(substitute(substitute(a:ext_reg, '#\s\+\S\+', '', 'g'), '\\\@<! ', '', 'g'), '\(\\\\\)\@<=\zs\s\+', '', 'g')
   endfunc
 
   " common public API
@@ -79,12 +82,19 @@ function! extended_regex#ExtendedRegex(...)
     let self.lookup_function = a:callback
   endfunc
 
+  func erex.register_lookup_dict(dict) dict
+    let self.lookup_dict = a:dict
+  endfunc
+
   func erex.parse(ext_reg) dict
     return self.expand(self.parse_multiline_regex(a:ext_reg))
   endfunc
 
   if a:0
     call erex.register_lookup(a:1)
+    if a:0 > 1
+      call erex.register_lookup_dict(a:2)
+    endif
   endif
 
   return erex

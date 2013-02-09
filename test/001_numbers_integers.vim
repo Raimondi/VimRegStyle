@@ -1,5 +1,5 @@
 call vimtest#StartTap()
-call vimtap#Plan(35) " <== XXX  Keep plan number updated.  XXX
+call vimtap#Plan(8 + 13 + 7 + 7 + 7 + 7) " <== XXX  Keep plan number updated.  XXX
 
 " hundredths      vim   \<\%(\d\|[1-9]\d\)\>
 " z_hundredths    vim   \<\d\{2}\>

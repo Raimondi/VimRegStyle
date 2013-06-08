@@ -1,4 +1,4 @@
-*vimregstyle.txt*	For Vim version 7.3	Last change: 2013-01-31
+*vimregstyle.txt*	Extended regular expressions & pattern library
 
 
 			VIM REFERENCE MANUAL	by Barry Arthur
